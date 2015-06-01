@@ -1,0 +1,27 @@
+{
+  "name": "ht1632",
+  "version": "1.0.0",
+  "description": "Simple Node.js library to communicate with a HT1632 LED controller chip using SPI.",
+  "main": "ht1632.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amondit/node-ht1632.git"
+  },
+  "keywords": [
+    "ht1632",
+    "led",
+    "spi"
+  ],
+  "dependencies": {
+    "pi-spi": "^1.0.0"
+  },
+  "author": "Arnaud Mondit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amondit/node-ht1632/issues"
+  },
+  "homepage": "https://github.com/amondit/node-ht1632#readme"
+}
