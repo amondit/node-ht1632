@@ -10,7 +10,7 @@ It is intentionally low level (directly exposes the HT1632 RAM addresses to writ
 `npm install ht1632`
 
 
-```
+```javascript
 var HT1632 = require('ht1632');
 
 var display = HT1632.initialize("/dev/spidev0.0", HT1632.mode.8NMOS);
