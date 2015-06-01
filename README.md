@@ -43,6 +43,10 @@ Probably requires running node under `sudo` for SPI permissions, unless you've u
 
 `mode`, optional,  is either `HT1632.mode.8NMOS`, `HT1632.mode.16NMOS`, `HT1632.mode.8PMOS` or `HT1632.mode.8NMOS`depending on the LED layout (see HT1632 datasheet and/or the display one). Defaults to `HT1632.mode.8PMOS`.
 
+### display.writeAddress(offset, d0, d1, d2, d3))
+
+Sets the `d0`, `d1`, `d2` and `d3` LED bits at the `offset` address. LED bits values are boolean, and `offset` value is integer between 0 and 64 (8NMOS or 8PMOS mode) or 96 (16NMOS or 16PMOS mode) as per the HT1632 datasheet.
+
 ### display.blink([enableBlinking])
 
 Sets (or gets, if no argument provided) the hardware based blinking of the HT1632 display. Value is boolean.
