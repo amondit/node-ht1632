@@ -45,9 +45,17 @@ exports.initialize = function (device, mode) {
 	var ht1632D2On		= 0x8 //"0000000000001000";
 	var ht1632D3On		= 0x4 //"0000000000000100";
 
-
 	var _blink = false;
 	var _pwmLevel = 15;
+
+	//Create memory map (either 64x4 in 8NMOS/8PMOS mode, or 96x4 in 16NMOS/16PMOS mode)
+	var _memory = new Array(_mode == _command8NMOS || _command8PMOS ? 64 : 96);
+	for (var i = 0; i < _memory.length; i++) {
+		_memory[i] = new Array(4);
+		_memory[0] = _memory[1] = _memory[2] = _memory[3] = 0;
+	};
+
+
 
 	//Init SPI interface
 
@@ -115,22 +123,46 @@ exports.initialize = function (device, mode) {
 	};
 
 	ht1632.writeAddress = function(offset, d0, d1, d2, d3) {
-		if (arguments.length == 4 && (typeof offset === 'numeric') && (typeof d0 === 'boolean') && (typeof d1 === 'boolean') && (typeof d2 === 'boolean') && (typeof d3 === 'boolean')) {
+		if (arguments.length == 4 \
+				&& (typeof offset === 'numeric') \
+				&& (offset >= 0) \
+				&& (offset < _memory.length) \
+				&& (typeof d0 === 'boolean') \
+				&& (typeof d1 === 'boolean') \
+				&& (typeof d2 === 'boolean') \
+				&& (typeof d3 === 'boolean')) {
 			var writeCommand = ht1632BaseWrite+offset*ht1632AddrIncr;
-			if (d0) { writeCommand = writeCommand+ht1632D0On};
-			if (d1) { writeCommand = writeCommand+ht1632D1On};
-			if (d2) { writeCommand = writeCommand+ht1632D2On};
-			if (d3) { writeCommand = writeCommand+ht1632D3On};
+			_memory[offset][0] = _memory[offset][1] = _memory[offset][2] = _memory[offset][3] = 0
+			if (d0) { 
+				writeCommand = writeCommand+ht1632D0On;
+				_memory[offset][0] = 1;
+			};
+			if (d1) { 
+				writeCommand = writeCommand+ht1632D1On;
+				_memory[offset][1] = 1;
+			};
+			if (d2) { 
+				writeCommand = writeCommand+ht1632D2On;
+				_memory[offset][2] = 1;
+			};
+			if (d3) { 
+				writeCommand = writeCommand+ht1632D3On;
+				_memory[offset][3] = 1;
+			};
+			//Message sent is 16bit but 14bit expected byt HT1632, so we append the 2 bits of next offset to prevent overlapping
+			if (offset < (_memory.length - 1)) {
+				writeCommand = writeCommand+0x2*_memory[offset+1][0];
+				writeCommand = writeCommand+0x1*_memory[offset+1][1];
+			};
 			spiMessage.writeUInt16BE(writeCommand,0);
 			spi.write(spiMessage, spiMessageTransferErrorHandling);
 			console.log("Writing "+spiMessage.readUInt16BE().toString(2));
 		}
-        else throw TypeError("Invalid arguments, required : number: offset, boolean d0, boolean d1, boolean d2, boolean d3");
+        else throw TypeError("Invalid arguments, required : number offset , boolean d0, boolean d1, boolean d2, boolean d3");
 	};
 
 	ht1632.clear = function() {
-		var maxAddressOffset = 96;
-		for (var i = 0; i < maxAddressOffset; i++) {
+		for (var i = 0; i < _memory.length; i++) {
 			ht1632.writeAddress(i, false ,false ,false , false);
 		};
 	};
