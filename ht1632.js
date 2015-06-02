@@ -161,6 +161,31 @@ exports.initialize = function (device, mode) {
         else throw TypeError("Invalid arguments, required : number offset , boolean d0, boolean d1, boolean d2, boolean d3");
 	};
 
+	ht1632.writeLed = function(offset, ledIndex, value) {
+		if (arguments.length == 3 \
+			&& (typeof offset === 'numeric') \
+			&& (offset >= 0 && offset < _memory.length) \
+			&& (typeof ledIndex === 'numeric') \
+			&& (ledIndex >= 0 && ledIndex <= 3) \
+			&& (typeof value === 'boolean')) {
+			switch(ledIndex) {
+				case 0:
+					ht1632.writeAddress(offset, value, _memory[offset][1], _memory[offset][2], _memory[offset][3]);
+					break;
+				case 1:
+					ht1632.writeAddress(offset, _memory[offset][0], value, _memory[offset][2], _memory[offset][3]);
+					break;
+				case 2:
+					ht1632.writeAddress(offset, _memory[offset][0], _memory[offset][1], value, _memory[offset][3]);
+					break;
+				case 3:
+					ht1632.writeAddress(offset, _memory[offset][0], _memory[offset][1], _memory[offset][2], value);
+					break;
+			};
+		}
+        	else throw TypeError("Invalid arguments, required : number offset , number ledIndex (range 0-3), boolean value");
+	};
+	
 	ht1632.clear = function() {
 		for (var i = 0; i < _memory.length; i++) {
 			ht1632.writeAddress(i, false ,false ,false , false);
