@@ -151,7 +151,10 @@ exports.initialize = function (device, mode) {
 			spi.write(spiMessage, spiMessageTransferErrorHandling);
 //			console.log("Writing "+spiMessage.readUInt16BE().toString(2));
 		}
-        else throw TypeError("Invalid arguments, required : number offset , boolean d0, boolean d1, boolean d2, boolean d3");
+        else {
+        	console.log(offset+" "+d0+" "+d1+" "+d2+" "+d3);
+        	throw TypeError("Invalid arguments, required : number offset , boolean d0, boolean d1, boolean d2, boolean d3");
+        }
 	};
 
 	ht1632.writeLed = function(offset, ledIndex, value) {
