@@ -123,7 +123,7 @@ exports.initialize = function (device, mode) {
 	};
 
 	ht1632.writeAddress = function(offset, d0, d1, d2, d3) {
-		if (arguments.length == 4 && (typeof offset === 'numeric') && (offset >= 0) && (offset < _memory.length) && (typeof d0 === 'boolean') && (typeof d1 === 'boolean') && (typeof d2 === 'boolean') && (typeof d3 === 'boolean')) {
+		if (arguments.length == 5 && (typeof offset === 'numeric') && (offset >= 0) && (offset < _memory.length) && (typeof d0 === 'boolean') && (typeof d1 === 'boolean') && (typeof d2 === 'boolean') && (typeof d3 === 'boolean')) {
 			var writeCommand = ht1632BaseWrite+offset*ht1632AddrIncr;
 			_memory[offset][0] = _memory[offset][1] = _memory[offset][2] = _memory[offset][3] = 0
 			if (d0) { 
