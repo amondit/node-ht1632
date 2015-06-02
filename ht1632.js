@@ -125,22 +125,22 @@ exports.initialize = function (device, mode) {
 	ht1632.writeAddress = function(offset, d0, d1, d2, d3) {
 		if (arguments.length == 5 && (typeof offset === 'numeric') && (offset >= 0) && (offset < _memory.length) && (typeof d0 === 'boolean') && (typeof d1 === 'boolean') && (typeof d2 === 'boolean') && (typeof d3 === 'boolean')) {
 			var writeCommand = ht1632BaseWrite+offset*ht1632AddrIncr;
-			_memory[offset][0] = _memory[offset][1] = _memory[offset][2] = _memory[offset][3] = 0
+			_memory[offset][0] = _memory[offset][1] = _memory[offset][2] = _memory[offset][3] = false;
 			if (d0) { 
 				writeCommand = writeCommand+ht1632D0On;
-				_memory[offset][0] = 1;
+				_memory[offset][0] = true;
 			};
 			if (d1) { 
 				writeCommand = writeCommand+ht1632D1On;
-				_memory[offset][1] = 1;
+				_memory[offset][1] = true;
 			};
 			if (d2) { 
 				writeCommand = writeCommand+ht1632D2On;
-				_memory[offset][2] = 1;
+				_memory[offset][2] = true;
 			};
 			if (d3) { 
 				writeCommand = writeCommand+ht1632D3On;
-				_memory[offset][3] = 1;
+				_memory[offset][3] = true;
 			};
 			//Message sent is 16bit but 14bit expected byt HT1632, so we append the 2 bits of next offset to prevent overlapping
 			if (offset < (_memory.length - 1)) {
