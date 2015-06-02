@@ -12,7 +12,7 @@ exports.mode = {
 exports.initialize = function (device, mode) {
 	var _mode = 0x8500; //8PMOS
 	if (arguments.length != 2 || (arguments.length != 1 && (typeof mode !== 'number')))
-		throw new TypeError("Expected arguments : device, [mode]").
+		throw new TypeError("Expected arguments : device, [mode]");
 	
 	var ht1632 = {};
 	if (arguments.length == 2) { _mode = mode};
