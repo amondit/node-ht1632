@@ -18,7 +18,7 @@
   "dependencies": {
     "pi-spi": "^1.0.0"
   },
-  "author": "Arnaud Mondit",
+  "author": "Arnaud Mondit (http://brindillesnomades.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amondit/node-ht1632/issues"
