@@ -2,10 +2,10 @@ var SPI = require('pi-spi');
 
 
 exports.mode = {
-	8NMOS: 0x8400,
-	16NMOS: 0x8480,
-	8PMOS: 0x8500,
-	16PMOS: 0x8580
+	MODE_8NMOS: 0x8400,
+	MODE_16NMOS: 0x8480,
+	MODE_8PMOS: 0x8500,
+	MODE_16PMOS: 0x8580
 };
 
 
@@ -15,7 +15,7 @@ exports.initialize = function (device, mode) {
 		throw new TypeError("Expected arguments : device, [mode]").
 	
 	var ht1632 = {};
-
+	if (arguments.length == 2) { _mode = mode};
 
 	//Define HT1632 command and data messages
 	//Note: to be used as unsigned 16b integers.
@@ -72,25 +72,25 @@ exports.initialize = function (device, mode) {
 
 	spiMessage.writeUInt16BE(_commandSysDis,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("SysDis "+spiMessage.readUInt16BE().toString(2));
+//	console.log("SysDis "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_mode,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("Mode "+spiMessage.readUInt16BE().toString(2));
+//	console.log("Mode "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandMasterMode,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("MasterMode "+spiMessage.readUInt16BE().toString(2));
+//	console.log("MasterMode "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandSysEn,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("SysEn "+spiMessage.readUInt16BE().toString(2));
+//	console.log("SysEn "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandLedOn,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("LedOn "+spiMessage.readUInt16BE().toString(2));
+//	console.log("LedOn "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandBasePWM+_commandPWMStep*_pwmLevel,0);>
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log(_pwmLevel+"PWM "+spiMessage.readUInt16BE().toString(2));
+//	console.log(_pwmLevel+"PWM "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandBlinkOff,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
-	console.log("BlinkOff "+spiMessage.readUInt16BE().toString(2));
+//	console.log("BlinkOff "+spiMessage.readUInt16BE().toString(2));
 	
 
 	ht1632.blink = function(enableBlinking) {
@@ -100,11 +100,11 @@ exports.initialize = function (device, mode) {
         	if (enableBlinking) {
 				spiMessage.writeUInt16BE(_commandBlinkOn,0);
 				spi.write(spiMessage, spiMessageTransferErrorHandling);
-				console.log("BlinkOn "+spiMessage.readUInt16BE().toString(2));
+//				console.log("BlinkOn "+spiMessage.readUInt16BE().toString(2));
 			}else {
 				spiMessage.writeUInt16BE(_commandBlinkOff,0);
 				spi.write(spiMessage, spiMessageTransferErrorHandling);
-				console.log("BlinkOff "+spiMessage.readUInt16BE().toString(2));
+//				console.log("BlinkOff "+spiMessage.readUInt16BE().toString(2));
 			};
         } 
         else throw TypeError("Blinking argument must be a boolean.");
@@ -117,7 +117,7 @@ exports.initialize = function (device, mode) {
         	_pwmLevel = intensity;
         	spiMessage.writeUInt16BE(_commandBasePWM+_commandPWMStep*_pwmLevel,0);
 			spi.write(spiMessage, spiMessageTransferErrorHandling);
-			console.log(_pwmLevel+"PWM "+spiMessage.readUInt16BE().toString(2));
+//			console.log(_pwmLevel+"PWM "+spiMessage.readUInt16BE().toString(2));
         } 
         else throw TypeError("PWM level must be a number between 0 and 15.");
 	};
@@ -156,18 +156,18 @@ exports.initialize = function (device, mode) {
 			};
 			spiMessage.writeUInt16BE(writeCommand,0);
 			spi.write(spiMessage, spiMessageTransferErrorHandling);
-			console.log("Writing "+spiMessage.readUInt16BE().toString(2));
+//			console.log("Writing "+spiMessage.readUInt16BE().toString(2));
 		}
         else throw TypeError("Invalid arguments, required : number offset , boolean d0, boolean d1, boolean d2, boolean d3");
 	};
 
 	ht1632.writeLed = function(offset, ledIndex, value) {
-		if (arguments.length == 3 \
-			&& (typeof offset === 'numeric') \
-			&& (offset >= 0 && offset < _memory.length) \
-			&& (typeof ledIndex === 'numeric') \
-			&& (ledIndex >= 0 && ledIndex <= 3) \
-			&& (typeof value === 'boolean')) {
+			if (arguments.length == 3 \
+				&& (typeof offset === 'numeric') \
+				&& (offset >= 0 && offset < _memory.length) \
+				&& (typeof ledIndex === 'numeric') \
+				&& (ledIndex >= 0 && ledIndex <= 3) \
+				&& (typeof value === 'boolean')) {
 			switch(ledIndex) {
 				case 0:
 					ht1632.writeAddress(offset, value, _memory[offset][1], _memory[offset][2], _memory[offset][3]);
@@ -183,9 +183,9 @@ exports.initialize = function (device, mode) {
 					break;
 			};
 		}
-        	else throw TypeError("Invalid arguments, required : number offset , number ledIndex (range 0-3), boolean value");
+        else throw TypeError("Invalid arguments, required : number offset , number ledIndex (range 0-3), boolean value");
 	};
-	
+
 	ht1632.clear = function() {
 		for (var i = 0; i < _memory.length; i++) {
 			ht1632.writeAddress(i, false ,false ,false , false);
