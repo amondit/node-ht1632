@@ -85,7 +85,7 @@ exports.initialize = function (device, mode) {
 	spiMessage.writeUInt16BE(_commandLedOn,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
 //	console.log("LedOn "+spiMessage.readUInt16BE().toString(2));
-	spiMessage.writeUInt16BE(_commandBasePWM+_commandPWMStep*_pwmLevel,0);>
+	spiMessage.writeUInt16BE(_commandBasePWM+_commandPWMStep*_pwmLevel,0);
 	spi.write(spiMessage, spiMessageTransferErrorHandling);
 //	console.log(_pwmLevel+"PWM "+spiMessage.readUInt16BE().toString(2));
 	spiMessage.writeUInt16BE(_commandBlinkOff,0);
