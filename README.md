@@ -13,10 +13,13 @@ It is intentionally low level (directly exposes the HT1632 RAM addresses to writ
 ```javascript
 var HT1632 = require('ht1632');
 
-var display = HT1632.initialize("/dev/spidev0.0", HT1632.mode.8NMOS);
+var display = HT1632.initialize("/dev/spidev0.0", HT1632.mode.MODE_8NMOS);
 
 // write led D1 at address 0x02
 display.writeAddress(0x02, false, true, false, false);
+
+// Sets the LED index 1 at address 0x02. Led index range is 0-3 as described in the datasheet.
+display.writeLed(0x02, 1, true);
 
 // Enable blinking
 display.blink(true);
@@ -46,6 +49,10 @@ Probably requires running node under `sudo` for SPI permissions, unless you've u
 ### display.writeAddress(offset, d0, d1, d2, d3))
 
 Sets the `d0`, `d1`, `d2` and `d3` LED bits at the `offset` address. LED bits values are boolean, and `offset` value is integer between 0 and 64 (8NMOS or 8PMOS mode) or 96 (16NMOS or 16PMOS mode) as per the HT1632 datasheet.
+
+### display.writeLed(offset, ledIndex, value))
+
+Sets the led of `ledIndex` at the `offset` address (led index range is 0-3 as described in the HT1632 datasheet). Value is boolean, and `offset` value is integer between 0 and 64 (8NMOS or 8PMOS mode) or 96 (16NMOS or 16PMOS mode) as per the HT1632 datasheet. Other led values at the same offset will stay the same.
 
 ### display.blink([enableBlinking])
 
