@@ -49,7 +49,7 @@ exports.initialize = function (device, mode) {
 	var _pwmLevel = 15;
 
 	//Create memory map (either 64x4 in 8NMOS/8PMOS mode, or 96x4 in 16NMOS/16PMOS mode)
-	var _memory = new Array(_mode == _command8NMOS || _command8PMOS ? 64 : 96);
+	var _memory = new Array((_mode == _command8NMOS) || (_mode == _command8PMOS) ? 64 : 96);
 	for (var i = 0; i < _memory.length; i++) {
 		_memory[i] = new Array(4);
 		_memory[0] = _memory[1] = _memory[2] = _memory[3] = false;
