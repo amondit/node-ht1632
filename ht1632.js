@@ -59,7 +59,7 @@ exports.initialize = function (device, mode) {
 
 	//Init SPI interface
 
-	var spi = SPI.initialize(dev);
+	var spi = SPI.initialize(device);
 	spi.clockSpeed(2560000);
 
 	var spiMessage = new Buffer(2);
