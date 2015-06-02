@@ -52,7 +52,7 @@ exports.initialize = function (device, mode) {
 	var _memory = new Array(_mode == _command8NMOS || _command8PMOS ? 64 : 96);
 	for (var i = 0; i < _memory.length; i++) {
 		_memory[i] = new Array(4);
-		_memory[0] = _memory[1] = _memory[2] = _memory[3] = 0;
+		_memory[0] = _memory[1] = _memory[2] = _memory[3] = false;
 	};
 
 
